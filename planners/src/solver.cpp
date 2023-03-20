@@ -147,8 +147,8 @@ Plan MAPF_Solver::pathsToPlan(const Paths &paths) {
 // -------------------------------
 // utilities for solver options
 // -------------------------------
-void MAPF_Solver::setSolverOption(std::shared_ptr <MAPF_Solver> solver,
-                                  const std::vector <std::string> &option) {
+void MAPF_Solver::setSolverOption(std::shared_ptr<MAPF_Solver> solver,
+                                  const std::vector<std::string> &option) {
     if (option.empty()) return;
     const int argc = option.size() + 1;
     char *argv[argc];
@@ -245,7 +245,7 @@ int MAPF_Solver::pathDist(const int i) const {
 void MAPF_Solver::createDistanceTable() {
     for (int i = 0; i < P->getNum(); ++i) {
         // breadth first search
-        std::queue < Node * > OPEN;
+        std::queue<Node *> OPEN;
         Node *n = P->getGoal(i);
         OPEN.push(n);
         distance_table[i][n->id] = 0;
@@ -288,7 +288,7 @@ Path MinimumSolver::getPathBySpaceTimeAstar(
     };
 
     // OPEN and CLOSE list
-    std::priority_queue < AstarNode * , AstarNodes, CompareAstarNode > OPEN(compare);
+    std::priority_queue<AstarNode *, AstarNodes, CompareAstarNode> OPEN(compare);
     std::unordered_map<std::string, bool> CLOSE;
 
     // initial node
@@ -356,7 +356,7 @@ MinimumSolver::CompareAstarNode MinimumSolver::compareAstarNodeBasic =
 Path MAPF_Solver::getPrioritizedPath(
         const int id, const Paths &paths, const int time_limit,
         const int upper_bound,
-        const std::vector <std::tuple<Node *, int>> &constraints,
+        const std::vector<std::tuple<Node *, int>> &constraints,
         CompareAstarNode &compare, const bool manage_path_table) {
     Node *const s = P->getStart(id);
     Node *const g = P->getGoal(id);

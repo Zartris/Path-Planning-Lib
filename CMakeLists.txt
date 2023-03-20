@@ -1,23 +1,43 @@
-cmake_minimum_required(VERSION 3.16)
-project(PathPlanningLib CXX)
+# Specify minimum required CMake version
+cmake_minimum_required(VERSION 3.16...3.18)
 
+# Set project name and language
+project(path_planning_lib CXX)
+
+# Include planners subdirectory
 add_subdirectory(./planners)
 
-add_executable(mapf planners/mapf.cpp)
-target_compile_features(mapf PUBLIC cxx_std_17)
-target_link_libraries(mapf lib-mapf)
+# Include pybind11 subdirectory
+add_subdirectory(third_party/pybind11)
 
-add_executable(mapd planners/mapd.cpp)
-target_compile_features(mapd PUBLIC cxx_std_17)
-target_link_libraries(mapd lib-mapf)
+# Include lib-graph subdirectory
+add_subdirectory(third_party/gridmap/graph)
 
-# format
-add_custom_target(clang-format
-  COMMAND clang-format -i
-  ../planners/include/*.hpp
-  ../planners/src/*.cpp
-  ../planners/mapf.cpp
-  ../planners/mapd.cpp)
+# Create pybind11 module
+pybind11_add_module(path_planning_lib pybinder.cpp)
+
+# Link path_planning_lib with lib-mapf and lib-graph
+target_link_libraries(path_planning_lib PUBLIC lib-mapf lib-graph)
+
+
+
+#
+#add_executable(mapf planners/mapf.cpp)
+#target_compile_features(mapf PUBLIC cxx_std_17)
+#target_link_libraries(mapf lib-mapf)
+#
+#add_executable(mapd planners/mapd.cpp)
+#target_compile_features(mapd PUBLIC cxx_std_17)
+#target_link_libraries(mapd lib-mapf)
+#
+## format
+#add_custom_target(clang-format
+#        COMMAND clang-format -i
+#        ../planners/include/*.hpp
+#        ../planners/src/*.cpp
+#        ../planners/mapf.cpp
+#        ../planners/mapd.cpp)
+
 
 # test
 #set(TEST_MAIN_FUNC ./third_party/googletest/googletest/src/gtest_main.cc)

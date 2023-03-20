@@ -9,6 +9,7 @@
 
 using Config = std::vector<Node *>;  // < loc_0[t], loc_1[t], ... >
 using Configs = std::vector<Config>;
+using Priorities = std::vector<int>;  // < priority_0[t], priority_1[t], ... >
 
 // check two configurations are same or not
 [[maybe_unused]] static bool sameConfig(const Config &config_i,
@@ -38,10 +39,11 @@ protected:
     std::mt19937 *MT;      // seed
     Config config_s;       // initial configuration
     Config config_g;       // goal configuration
+    std::vector<int> config_p;       // priority configuration
     int num_agents;        // number of agents
     int max_timestep;      // timestep limit
     int max_comp_time;     // comp_time limit, ms
-
+    bool grid_with_speed; // Type of grid
     // utilities
     void halt(const std::string &msg) const;
 
@@ -69,6 +71,8 @@ public:
     Config getConfigStart() const { return config_s; };
 
     Config getConfigGoal() const { return config_g; };
+
+    Priorities getConfigPriority() const { return config_p; };
 
     int getMaxTimestep() { return max_timestep; };
 
@@ -98,6 +102,38 @@ public:
     MAPF_Instance(MAPF_Instance *P, int _max_comp_time);
 
     ~MAPF_Instance();
+
+    bool isInitializedInstance() const { return instance_initialized; }
+
+    // used when making new instance file
+    void makeScenFile(const std::string &output_file);
+};
+
+class MAPF_Persistent : public Problem {
+private:
+    const bool instance_initialized;  // for memory manage
+
+public:
+    // set starts and goals randomly
+    void setRandomStartsGoals();
+
+    // set well-formed instance
+    void setWellFormedInstance();
+
+    MAPF_Persistent(const std::string &_instance_name, int _seed,
+                    int _max_comp_time, int _max_timestep,
+                    int _num_agents, bool _grid_with_speed,
+                    const std::vector<std::vector<int>> &grid_map,
+                    const std::vector<std::vector<int>> &edge_cost_moving_up,
+                    const std::vector<std::vector<int>> &edge_cost_moving_down,
+                    const std::vector<std::vector<int>> &edge_cost_moving_left,
+                    const std::vector<std::vector<int>> &edge_cost_moving_right);
+
+    ~MAPF_Persistent();
+
+    void setConfig(const std::vector<std::pair<int, int>> &start_pos,
+                   const std::vector<std::pair<int, int>> &goal_pos,
+                   const std::vector<int> &priority);
 
     bool isInitializedInstance() const { return instance_initialized; }
 

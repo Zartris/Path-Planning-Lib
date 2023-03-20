@@ -8,7 +8,7 @@
 
 struct Paths {
 private:
-    std::vector <Path> paths;  // main
+    std::vector<Path> paths;  // main
     int makespan;
 
 public:

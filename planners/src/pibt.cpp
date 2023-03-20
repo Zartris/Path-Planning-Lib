@@ -1,6 +1,6 @@
 #include "../include/pibt.hpp"
 
-const std::string PIBT::SOLVER_NAME = "PIBT";
+const std::string PIBT::SOLVER_NAME = "PIBT2";
 
 PIBT::PIBT(MAPF_Instance *_P)
         : MAPF_Solver(_P),

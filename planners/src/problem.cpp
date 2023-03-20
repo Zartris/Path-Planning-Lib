@@ -3,7 +3,6 @@
 #include <fstream>
 #include <regex>
 
-#include "../include/util.hpp"
 
 Problem::Problem(std::string _instance, Graph *_G, std::mt19937 *_MT,
                  Config _config_s, Config _config_g, int _num_agents,
@@ -266,6 +265,203 @@ void MAPF_Instance::setWellFormedInstance() {
 }
 
 void MAPF_Instance::makeScenFile(const std::string &output_file) {
+    Grid *grid = reinterpret_cast<Grid *>(G);
+    std::ofstream log;
+    log.open(output_file, std::ios::out);
+    log << "map_file=" << grid->getMapFileName() << "\n";
+    log << "agents=" << num_agents << "\n";
+    log << "seed=0\n";
+    log << "random_problem=0\n";
+    log << "max_timestep=" << max_timestep << "\n";
+    log << "max_comp_time=" << max_comp_time << "\n";
+    for (int i = 0; i < num_agents; ++i) {
+        log << config_s[i]->pos.x << "," << config_s[i]->pos.y << ","
+            << config_g[i]->pos.x << "," << config_g[i]->pos.y << "\n";
+    }
+    log.close();
+}
+// -------------------------------------------
+// MAPF Persistent
+
+MAPF_Persistent::MAPF_Persistent(const std::string &_instance_name, const int _seed,
+                                 const int _max_comp_time, const int _max_timestep,
+                                 const int _num_agents, const bool _grid_with_speed,
+                                 const std::vector<std::vector<int>> &grid_map,
+                                 const std::vector<std::vector<int>> &edge_cost_moving_up,
+                                 const std::vector<std::vector<int>> &edge_cost_moving_down,
+                                 const std::vector<std::vector<int>> &edge_cost_moving_left,
+                                 const std::vector<std::vector<int>> &edge_cost_moving_right)
+        : Problem(_instance_name), instance_initialized(true) {
+
+    // read map
+    grid_with_speed = _grid_with_speed;
+    if (grid_with_speed) {
+        G = new GridWithSpeed(grid_map, edge_cost_moving_up,
+                              edge_cost_moving_down, edge_cost_moving_left,
+                              edge_cost_moving_right);
+    } else {
+        // TODO:: Make grid accept image map
+        G = new Grid(_instance_name);
+    }
+    // set number of agents
+    num_agents = _num_agents;
+    // set random seed
+    MT = new std::mt19937(_seed);
+    // set max timestep
+    max_timestep = _max_timestep;
+    // set max computation time
+    max_comp_time = _max_comp_time;
+
+    setWellFormedInstance();
+
+    // trimming
+    config_s.resize(num_agents);
+    config_g.resize(num_agents);
+    config_p.resize(num_agents);
+}
+
+MAPF_Persistent::~MAPF_Persistent() {
+    if (instance_initialized) {
+        if (G != nullptr) delete G;
+        if (MT != nullptr) delete MT;
+    }
+}
+
+void MAPF_Persistent::setConfig(const std::vector<std::pair<int, int>> &start_pos,
+                                const std::vector<std::pair<int, int>> &goal_pos,
+                                const std::vector<int> &priority) {
+    if (start_pos.size() != num_agents) {
+        halt("Invalid length of input vector (input: " + std::to_string(start_pos.size()) +
+             ", num_agents: " + std::to_string(num_agents) + ")");
+    }
+    for (int i = 0; i < num_agents; ++i) {
+        int x_s = start_pos[i].first;
+        int y_s = start_pos[i].second;
+        int x_g = goal_pos[i].first;
+        int y_g = goal_pos[i].second;
+        if (!G->existNode(x_s, y_s)) {
+            halt("start node (" + std::to_string(x_s) + ", " + std::to_string(y_s) +
+                 ") does not exist, invalid scenario");
+        }
+        if (!G->existNode(x_g, y_g)) {
+            halt("goal node (" + std::to_string(x_g) + ", " + std::to_string(y_g) +
+                 ") does not exist, invalid scenario");
+        }
+
+        Node *s = G->getNode(x_s, y_s);
+        Node *g = G->getNode(x_g, y_g);
+        config_s.push_back(s);
+        config_g.push_back(g);
+        config_s[i] = G->getNode(start_pos[i].first, start_pos[i].second);
+        config_g[i] = G->getNode(goal_pos[i].first, goal_pos[i].second);
+        config_p[i] = priority[i];
+    }
+}
+
+void MAPF_Persistent::setRandomStartsGoals() {
+    // initialize
+    config_s.clear();
+    config_g.clear();
+    config_p.clear();
+    // get grid size
+    auto N = 0;
+    if (grid_with_speed) {
+        auto *grid = reinterpret_cast<GridWithSpeed *>(G);
+        N = grid->getWidth() * grid->getHeight();
+    } else {
+        Grid *grid = reinterpret_cast<Grid *>(G);
+        N = grid->getWidth() * grid->getHeight();
+    }
+    // set starts
+    std::vector<int> starts(N);
+    std::iota(starts.begin(), starts.end(), 0);
+    std::shuffle(starts.begin(), starts.end(), *MT);
+    int i = 0;
+    while (true) {
+        while (G->getNode(starts[i]) == nullptr) {
+            ++i;
+            if (i >= N) halt("number of agents is too large.");
+        }
+        config_s.push_back(G->getNode(starts[i]));
+        if ((int) config_s.size() == num_agents) break;
+        ++i;
+    }
+    // set goals
+    std::vector<int> goals(N);
+    std::iota(goals.begin(), goals.end(), 0);
+    std::shuffle(goals.begin(), goals.end(), *MT);
+    int j = 0;
+    while (true) {
+        while (G->getNode(goals[j]) == nullptr) {
+            ++j;
+            if (j >= N) halt("set goal, number of agents is too large.");
+        }
+        // retry
+        if (G->getNode(goals[j]) == config_s[config_g.size()]) {
+            config_g.clear();
+            std::shuffle(goals.begin(), goals.end(), *MT);
+            j = 0;
+            continue;
+        }
+        config_g.push_back(G->getNode(goals[j]));
+        if ((int) config_g.size() == num_agents) break;
+        ++j;
+    }
+    // set priorities to distance between nodes
+    for (int n = 0; n < num_agents; ++n) {
+        Node *start_node = config_s[n];
+        Node *goal_node = config_s[n];
+        int p = G->dist(start_node, goal_node);
+        config_p.push_back(p);
+    }
+}
+
+/*
+ * Note: it is hard to generate well-formed instances
+ * with dense situations (e.g., ≥300 agents in arena)
+ */
+void MAPF_Persistent::setWellFormedInstance() {
+    // initialize
+    config_s.clear();
+    config_g.clear();
+    config_p.clear();
+
+    // get grid size
+    const int N = G->getNodesSize();
+    Nodes prohibited, starts_goals;
+
+    while ((int) config_g.size() < getNum()) {
+        while (true) {
+            // determine start
+            Node *s;
+            do {
+                s = G->getNode(getRandomInt(0, N - 1, MT));
+            } while (s == nullptr || inArray(s, prohibited));
+
+            // determine goal
+            Node *g;
+            do {
+                g = G->getNode(getRandomInt(0, N - 1, MT));
+            } while (g == nullptr || g == s || inArray(g, prohibited));
+
+            // ensure well formed property
+            auto path = G->getPath(s, g, starts_goals);
+            if (!path.empty()) {
+                config_s.push_back(s);
+                config_g.push_back(g);
+                config_p.push_back(static_cast<int>(path.size()));
+                starts_goals.push_back(s);
+                starts_goals.push_back(g);
+                for (auto v: path) {
+                    if (!inArray(v, prohibited)) prohibited.push_back(v);
+                }
+                break;
+            }
+        }
+    }
+}
+
+void MAPF_Persistent::makeScenFile(const std::string &output_file) {
     Grid *grid = reinterpret_cast<Grid *>(G);
     std::ofstream log;
     log.open(output_file, std::ios::out);

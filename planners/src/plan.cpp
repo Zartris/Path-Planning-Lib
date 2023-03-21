@@ -7,7 +7,7 @@ Config Plan::get(const int t) const {
 }
 
 Node *Plan::get(const int t, const int i) const {
-    if (empty()) halt("invalid operation");
+    if (empty()) halt("invalid operation (Node *Plan::get)");
     if (!(0 <= t && t < (int) configs.size())) halt("invalid timestep");
     if (!(0 <= i && i < (int) configs[0].size())) halt("invalid agent id");
     return configs[t][i];
@@ -21,13 +21,13 @@ Path Plan::getPath(const int i) const {
 }
 
 Config Plan::last() const {
-    if (empty()) halt("invalid operation");
+    if (empty()) halt("invalid operation (Config *Plan::last)");
     return configs[getMakespan()];
 }
 
 Node *Plan::last(const int i) const {
-    if (empty()) halt("invalid operation");
-    if (i < 0 || (int) configs[0].size() <= i) halt("invalid operation");
+    if (empty()) halt("invalid operation (Node *Plan::last)");
+    if (i < 0 || (int) configs[0].size() <= i) halt("invalid operation (Node *Plan::last second)");
     return configs[getMakespan()][i];
 }
 
@@ -35,7 +35,7 @@ void Plan::clear() { configs.clear(); }
 
 void Plan::add(const Config &c) {
     if (!configs.empty() && configs.at(0).size() != c.size()) {
-        halt("invalid operation");
+        halt("invalid operation (void Plan::add)");
     }
     configs.push_back(c);
 }
@@ -69,9 +69,9 @@ Plan Plan::operator+(const Plan &other) const {
     Config c2 = other.get(0);
     const int c1_size = c1.size();
     const int c2_size = c2.size();
-    if (c1_size != c2_size) halt("invalid operation");
+    if (c1_size != c2_size) halt("invalid operation (Plan Plan::operator+)");
     for (int i = 0; i < c1_size; ++i) {
-        if (c1[i] != c2[i]) halt("invalid operation.");
+        if (c1[i] != c2[i]) halt("invalid operation. (Plan Plan::operator+ second)");
     }
     // merge
     Plan new_plan;
@@ -86,7 +86,7 @@ void Plan::operator+=(const Plan &other) {
         return;
     }
     // check validity
-    if (!sameConfig(last(), other.get(0))) halt("invalid operation");
+    if (!sameConfig(last(), other.get(0))) halt("invalid operation (void Plan::operator+)");
     // merge
     for (int t = 1; t < other.size(); ++t) add(other.get(t));
 }

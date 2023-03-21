@@ -43,6 +43,11 @@ public:
     // configs.size
     int size() const;
 
+    // number_of_agents
+    int getNumAgents() const {
+        return static_cast<int>(configs[0].size());
+    };
+
     // size - 1
     int getMakespan() const;
 

@@ -10,8 +10,16 @@ project(lib-mapf)
 # Create shared library from source files
 add_library(lib-mapf SHARED ${SRCS})
 
-# Add preprocessor definition for map directory path
-add_definitions(-D_MAPDIR_= "${CMAKE_CURRENT_LIST_DIR}/../pibt_test/map/")
+# Add preprocessor definition for map directory path (No spaces allowed between =")
+#add_definitions(-D_MAPDIR_="${CMAKE_CURRENT_LIST_DIR}/../pibt_test/map/")
+
+# Print out all variables
+get_cmake_property(_variableNames VARIABLES)
+list(SORT _variableNames)
+foreach (_variableName ${_variableNames})
+    message(STATUS "${_variableName}=${${_variableName}}")
+endforeach ()
+
 
 # Set compilation options for lib-mapf
 target_compile_options(lib-mapf PUBLIC -O3 -Wall -mtune=native -march=native)

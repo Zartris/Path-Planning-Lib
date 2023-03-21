@@ -4,6 +4,9 @@ cmake_minimum_required(VERSION 3.16...3.18)
 # Set project name and language
 project(path_planning_lib CXX)
 
+# Add preprocessor definition for map directory path (No spaces allowed between =")
+add_definitions(-D_MAPDIR_="${CMAKE_CURRENT_LIST_DIR}/pibt_test/map/")
+
 # Include planners subdirectory
 add_subdirectory(./planners)
 
@@ -20,7 +23,9 @@ pybind11_add_module(path_planning_lib pybinder.cpp)
 target_link_libraries(path_planning_lib PUBLIC lib-mapf lib-graph)
 
 
-
+add_executable(simple_test planners/simple_tests.cpp)
+target_compile_features(simple_test PUBLIC cxx_std_17)
+target_link_libraries(simple_test lib-mapf)
 
 add_executable(mapf planners/mapf.cpp)
 target_compile_features(mapf PUBLIC cxx_std_17)

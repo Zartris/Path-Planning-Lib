@@ -49,7 +49,7 @@ int Paths::size() const { return paths.size(); }
 
 void Paths::operator+=(const Paths &other) {
     if (other.empty()) return;
-    if (paths.size() != other.paths.size()) halt("invalid operation");
+    if (paths.size() != other.paths.size()) halt("invalid operation (void Paths::operator+)");
     const int paths_size = paths.size();
     if (makespan == 0) {  // empty
         for (int i = 0; i < paths_size; ++i) insert(i, other.get(i));
@@ -57,7 +57,7 @@ void Paths::operator+=(const Paths &other) {
         std::vector<Path> new_paths(paths_size);
         for (int i = 0; i < paths_size; ++i) {
             if (paths[i].empty() || *(paths[i].end() - 1) != other.paths[i][0]) {
-                halt("invalid operation");
+                halt("invalid operation (void Paths::operator+ second)");
             }
             Path tmp;
             // former

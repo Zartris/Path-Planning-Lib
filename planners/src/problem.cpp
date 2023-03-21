@@ -213,10 +213,14 @@ MAPF_Instance::~MAPF_Instance() {
 void MAPF_Instance::setConfig(const std::vector<std::pair<int, int>> &start_pos,
                               const std::vector<std::pair<int, int>> &goal_pos,
                               const std::vector<int> &priority) {
-    if (start_pos.size() != num_agents) {
+    if (static_cast<int>(start_pos.size()) != num_agents) {
         halt("Invalid length of input vector (input: " + std::to_string(start_pos.size()) +
              ", num_agents: " + std::to_string(num_agents) + ")");
     }
+    config_s.clear();
+    config_g.clear();
+    config_p.clear();
+
     for (int i = 0; i < num_agents; ++i) {
         int x_s = start_pos[i].first;
         int y_s = start_pos[i].second;
@@ -235,9 +239,7 @@ void MAPF_Instance::setConfig(const std::vector<std::pair<int, int>> &start_pos,
         Node *g = G->getNode(x_g, y_g);
         config_s.push_back(s);
         config_g.push_back(g);
-        config_s[i] = G->getNode(start_pos[i].first, start_pos[i].second);
-        config_g[i] = G->getNode(goal_pos[i].first, goal_pos[i].second);
-        config_p[i] = priority[i];
+        config_p.push_back(priority[i]);
     }
 }
 

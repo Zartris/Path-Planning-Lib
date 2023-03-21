@@ -85,7 +85,6 @@ void MAPF_Solver::exec() {
         preprocessing_comp_time = getSolverElapsedTime();
         info("  done, elapsed: ", preprocessing_comp_time);
     }
-
     run();
 }
 

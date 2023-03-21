@@ -87,11 +87,7 @@ class MAPF_Instance : public Problem {
 private:
     const bool instance_initialized;  // for memory manage
 
-    // set starts and goals randomly
-    void setRandomStartsGoals();
 
-    // set well-formed instance
-    void setWellFormedInstance();
 
 public:
     MAPF_Instance(const std::string &_instance);
@@ -115,6 +111,12 @@ public:
     void setConfig(const std::vector<std::pair<int, int>> &start_pos,
                    const std::vector<std::pair<int, int>> &goal_pos,
                    const std::vector<int> &priority);
+
+    // set starts and goals randomly
+    void setRandomStartsGoals();
+
+    // set well-formed instance
+    void setWellFormedInstance();
 
     bool isInitializedInstance() const { return instance_initialized; }
 

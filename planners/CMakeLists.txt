@@ -11,7 +11,7 @@ project(lib-mapf)
 add_library(lib-mapf SHARED ${SRCS})
 
 # Add preprocessor definition for map directory path
-add_definitions(-D_MAPDIR_="${CMAKE_CURRENT_LIST_DIR}/../pibt_test/map/")
+add_definitions(-D_MAPDIR_= "${CMAKE_CURRENT_LIST_DIR}/../pibt_test/map/")
 
 # Set compilation options for lib-mapf
 target_compile_options(lib-mapf PUBLIC -O3 -Wall -mtune=native -march=native)
@@ -24,7 +24,6 @@ target_include_directories(lib-mapf INTERFACE ./include)
 
 # Link lib-mapf with lib-graph
 target_link_libraries(lib-mapf PUBLIC lib-graph)
-
 
 
 #target_include_directories(lib-mapf PUBLIC ../third_party/gridmap/graph/include)

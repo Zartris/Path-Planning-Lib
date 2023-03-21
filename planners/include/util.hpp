@@ -14,7 +14,7 @@ using Time = std::chrono::steady_clock;
 
 // whether element 'a' is found in vector T
 template<typename T>
-static bool inArray(const T a, const std::vector <T> &arr) {
+static bool inArray(const T a, const std::vector<T> &arr) {
     auto itr = std::find(arr.begin(), arr.end(), a);
     return itr != arr.end();
 }
@@ -41,7 +41,7 @@ static bool inArray(const T a, const std::vector <T> &arr) {
 
 // return one element randomly from vector
 template<typename T>
-static T randomChoose(const std::vector <T> &arr, std::mt19937 *const MT) {
+static T randomChoose(const std::vector<T> &arr, std::mt19937 *const MT) {
     return arr[getRandomInt(0, arr.size() - 1, MT)];
 }
 

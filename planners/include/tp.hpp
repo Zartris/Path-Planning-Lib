@@ -15,13 +15,13 @@ private:
     };
     using Agents = std::vector<Agent *>;
 
-    void updatePath1(int i, Task *task, std::vector <Path> &TOKEN);
+    void updatePath1(int i, Task *task, std::vector<Path> &TOKEN);
 
-    void updatePath2(int i, std::vector <Path> &TOKEN, Tasks &unassigned_tasks);
+    void updatePath2(int i, std::vector<Path> &TOKEN, Tasks &unassigned_tasks);
 
-    void updatePath(int i, Node *g, std::vector <Path> &TOKEN);
+    void updatePath(int i, Node *g, std::vector<Path> &TOKEN);
 
-    std::vector <std::vector<int>> CONFLICT_TABLE;  // time, node -> agent
+    std::vector<std::vector<int>> CONFLICT_TABLE;  // time, node -> agent
     static constexpr int NIL = -1;
 
     // main

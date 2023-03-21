@@ -21,7 +21,7 @@ void PIBT_PLUS::run() {
     }
 
     // solve by PIBT
-    auto _P = MAPF_Instance(P, P->getConfigStart(), P->getConfigGoal(),
+    auto _P = MAPF_Instance(P, P->getConfigStart(), P->getConfigGoal(), P->getConfigPriority(),
                             max_comp_time, LB_makespan);
     auto init_solver = std::make_unique<PIBT>(&_P);
     init_solver->setDistanceTable(
@@ -38,7 +38,7 @@ void PIBT_PLUS::run() {
         auto t_complement = Time::now();
 
         // solved by Push & Swap
-        auto _Q = MAPF_Instance(P, solution.last(), P->getConfigGoal(),
+        auto _Q = MAPF_Instance(P, solution.last(), P->getConfigGoal(), P->getConfigPriority(),
                                 getRemainedTime(), max_timestep - LB_makespan);
         auto comp_solver = std::make_shared<PushAndSwap>(&_Q);
 

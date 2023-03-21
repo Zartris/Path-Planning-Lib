@@ -21,22 +21,22 @@ target_link_libraries(path_planning_lib PUBLIC lib-mapf lib-graph)
 
 
 
-#
-#add_executable(mapf planners/mapf.cpp)
-#target_compile_features(mapf PUBLIC cxx_std_17)
-#target_link_libraries(mapf lib-mapf)
-#
-#add_executable(mapd planners/mapd.cpp)
-#target_compile_features(mapd PUBLIC cxx_std_17)
-#target_link_libraries(mapd lib-mapf)
-#
-## format
-#add_custom_target(clang-format
-#        COMMAND clang-format -i
-#        ../planners/include/*.hpp
-#        ../planners/src/*.cpp
-#        ../planners/mapf.cpp
-#        ../planners/mapd.cpp)
+
+add_executable(mapf planners/mapf.cpp)
+target_compile_features(mapf PUBLIC cxx_std_17)
+target_link_libraries(mapf lib-mapf)
+
+add_executable(mapd planners/mapd.cpp)
+target_compile_features(mapd PUBLIC cxx_std_17)
+target_link_libraries(mapd lib-mapf)
+
+# format
+add_custom_target(clang-format
+        COMMAND clang-format -i
+        ../planners/include/*.hpp
+        ../planners/src/*.cpp
+        ../planners/mapf.cpp
+        ../planners/mapd.cpp)
 
 
 # test

@@ -1,7 +1,7 @@
 #include "../include/paths.hpp"
 
 Paths::Paths(int num_agents) {
-    std::vector <Path> tmp(num_agents, Path(0));
+    std::vector<Path> tmp(num_agents, Path(0));
     paths = tmp;
     makespan = 0;
 }
@@ -54,7 +54,7 @@ void Paths::operator+=(const Paths &other) {
     if (makespan == 0) {  // empty
         for (int i = 0; i < paths_size; ++i) insert(i, other.get(i));
     } else {
-        std::vector <Path> new_paths(paths_size);
+        std::vector<Path> new_paths(paths_size);
         for (int i = 0; i < paths_size; ++i) {
             if (paths[i].empty() || *(paths[i].end() - 1) != other.paths[i][0]) {
                 halt("invalid operation");

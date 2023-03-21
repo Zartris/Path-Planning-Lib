@@ -90,7 +90,7 @@ Path HCA::getPrioritizedPath(int id, const Paths &paths) {
 void HCA::setParams(int argc, char *argv[]) {
     struct option longopts[] = {
             {"disable-dist-init", no_argument, 0, 'd'},
-            {0,                   0,           0, 0},
+            {0, 0,                             0, 0},
     };
     optind = 1;  // reset
     int opt, longindex;

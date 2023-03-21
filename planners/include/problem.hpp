@@ -55,7 +55,7 @@ public:
     Problem(const std::string &_instance) : instance(_instance) {}
 
     Problem(std::string _instance, Graph *_G, std::mt19937 *_MT, Config _config_s,
-            Config _config_g, int _num_agents, int _max_timestep,
+            Config _config_g, std::vector<int> _config_p, int _num_agents, int _max_timestep,
             int _max_comp_time);
 
     ~Problem() {};
@@ -96,40 +96,21 @@ private:
 public:
     MAPF_Instance(const std::string &_instance);
 
-    MAPF_Instance(MAPF_Instance *P, Config _config_s, Config _config_g,
+    MAPF_Instance(const std::string &_instance_name, int _seed,
+                  int _max_comp_time, int _max_timestep,
+                  int _num_agents, bool _grid_with_speed,
+                  const std::vector<std::vector<int>> &grid_map,
+                  const std::vector<std::vector<int>> &edge_cost_moving_up,
+                  const std::vector<std::vector<int>> &edge_cost_moving_down,
+                  const std::vector<std::vector<int>> &edge_cost_moving_left,
+                  const std::vector<std::vector<int>> &edge_cost_moving_right);
+
+    MAPF_Instance(MAPF_Instance *P, Config _config_s, Config _config_g, std::vector<int> _config_p,
                   int _max_comp_time, int _max_timestep);
 
     MAPF_Instance(MAPF_Instance *P, int _max_comp_time);
 
     ~MAPF_Instance();
-
-    bool isInitializedInstance() const { return instance_initialized; }
-
-    // used when making new instance file
-    void makeScenFile(const std::string &output_file);
-};
-
-class MAPF_Persistent : public Problem {
-private:
-    const bool instance_initialized;  // for memory manage
-
-public:
-    // set starts and goals randomly
-    void setRandomStartsGoals();
-
-    // set well-formed instance
-    void setWellFormedInstance();
-
-    MAPF_Persistent(const std::string &_instance_name, int _seed,
-                    int _max_comp_time, int _max_timestep,
-                    int _num_agents, bool _grid_with_speed,
-                    const std::vector<std::vector<int>> &grid_map,
-                    const std::vector<std::vector<int>> &edge_cost_moving_up,
-                    const std::vector<std::vector<int>> &edge_cost_moving_down,
-                    const std::vector<std::vector<int>> &edge_cost_moving_left,
-                    const std::vector<std::vector<int>> &edge_cost_moving_right);
-
-    ~MAPF_Persistent();
 
     void setConfig(const std::vector<std::pair<int, int>> &start_pos,
                    const std::vector<std::pair<int, int>> &goal_pos,

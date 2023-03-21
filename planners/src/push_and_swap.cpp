@@ -487,7 +487,7 @@ void PushAndSwap::findNodesWithManyNeighbors() {
  */
 Plan PushAndSwap::compress(const Plan &plan) {
     // create table
-    std::vector <std::queue<int>> temp_orders(G->getNodesSize());
+    std::vector<std::queue<int>> temp_orders(G->getNodesSize());
     const int makespan = plan.getMakespan();
     for (int t = 0; t <= makespan; ++t) {
         for (int i = 0; i < P->getNum(); ++i) {
@@ -538,7 +538,7 @@ void PushAndSwap::setParams(int argc, char *argv[]) {
     struct option longopts[] = {
             {"no-compress",       no_argument, 0, 'c'},
             {"disable-dist-init", no_argument, 0, 'd'},
-            {0,                   0,           0, 0},
+            {0, 0,                             0, 0},
     };
     optind = 1;  // reset
     int opt, longindex;

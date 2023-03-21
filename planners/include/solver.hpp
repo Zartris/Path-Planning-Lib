@@ -152,7 +152,7 @@ private:
 
     // distance to goal
 protected:
-    using DistanceTable = std::vector <std::vector<int>>;  // [agent][node_id]
+    using DistanceTable = std::vector<std::vector<int>>;  // [agent][node_id]
     DistanceTable distance_table;                         // distance table
     DistanceTable *distance_table_p;  // pointer, used in nested solvers
     int preprocessing_comp_time;      // computation time
@@ -193,8 +193,8 @@ protected:
     // params
 protected:
     // used for set underlying solver options
-    static void setSolverOption(std::shared_ptr <MAPF_Solver> solver,
-                                const std::vector <std::string> &option);
+    static void setSolverOption(std::shared_ptr<MAPF_Solver> solver,
+                                const std::vector<std::string> &option);
 
     // -------------------------------
     // print
@@ -228,7 +228,7 @@ public:
             const Paths &paths,          // already reserved paths
             const int time_limit = -1,   // time limit
             const int upper_bound = -1,  // upper bound of timesteps
-            const std::vector <std::tuple<Node *, int>> &constraints =
+            const std::vector<std::tuple<Node *, int>> &constraints =
                     {},  // additional constraints, space-time
             CompareAstarNode &compare = compareAstarNodeBasic,  // compare two nodes
             const bool manage_path_table =
@@ -245,14 +245,14 @@ protected:
                                      const Paths &paths);
 
     static constexpr int NIL = -1;
-    std::vector <std::vector<int>> PATH_TABLE;
+    std::vector<std::vector<int>> PATH_TABLE;
 
 public:
     MAPF_Solver(MAPF_Instance *_P);
 
     virtual ~MAPF_Solver();
 
-    MAPF_Instance *getP() { return P; }
+    Problem *getP() { return P; }
 };
 
 // ====================================================
@@ -261,8 +261,8 @@ class MAPD_Solver : public MinimumSolver {
 protected:
     MAPD_Instance *const P;  // problem instance
 
-    std::vector <Nodes> hist_targets;  // time, agent -> current target
-    std::vector <Tasks> hist_tasks;    // time, agent -> assigned_task
+    std::vector<Nodes> hist_targets;  // time, agent -> current target
+    std::vector<Tasks> hist_tasks;    // time, agent -> assigned_task
 
 public:
     void printResult();
@@ -282,7 +282,7 @@ protected:
 protected:
     bool use_distance_table;
     int preprocessing_comp_time;                          // computation time
-    using DistanceTable = std::vector <std::vector<int>>;  // [node_id][node_id]
+    using DistanceTable = std::vector<std::vector<int>>;  // [node_id][node_id]
     DistanceTable distance_table;                         // distance table
     int pathDist(Node *const s, Node *const g) const;
 

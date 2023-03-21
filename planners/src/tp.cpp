@@ -8,7 +8,7 @@ TP::TP(MAPD_Instance *_P, bool _use_distance_table)
 }
 
 void TP::run() {
-    std::vector <Path> TOKEN(P->getNum());
+    std::vector<Path> TOKEN(P->getNum());
     Agents A;
 
     // initialize conflict table
@@ -191,7 +191,7 @@ void TP::run() {
     for (auto a: A) delete a;
 }
 
-void TP::updatePath1(int i, Task *task, std::vector <Path> &TOKEN) {
+void TP::updatePath1(int i, Task *task, std::vector<Path> &TOKEN) {
     info("   ", "updatePath1, agent-", i);
 
     // find path: loc -> pickup location
@@ -200,7 +200,7 @@ void TP::updatePath1(int i, Task *task, std::vector <Path> &TOKEN) {
     updatePath(i, task->loc_delivery, TOKEN);
 }
 
-void TP::updatePath2(int i, std::vector <Path> &TOKEN, Tasks &unassigned_tasks) {
+void TP::updatePath2(int i, std::vector<Path> &TOKEN, Tasks &unassigned_tasks) {
     info("   ", "updatePath2, agent-", i);
 
     Node *target;
@@ -243,7 +243,7 @@ void TP::updatePath2(int i, std::vector <Path> &TOKEN, Tasks &unassigned_tasks) 
     updatePath(i, target, TOKEN);
 }
 
-void TP::updatePath(int i, Node *g, std::vector <Path> &TOKEN) {
+void TP::updatePath(int i, Node *g, std::vector<Path> &TOKEN) {
     auto s = *(TOKEN[i].end() - 1);
     const int current_timestep = (int) TOKEN[i].size() - 1;
 

@@ -2,6 +2,7 @@
 #include <pybind11/stl.h>
 #include <pybind11/numpy.h>
 #include "planners/include/problem.hpp"
+#include "pibt.hpp"
 
 #define STRINGIFY(x) #x
 #define MACRO_STRINGIFY(x) STRINGIFY(x)
@@ -44,6 +45,9 @@ PYBIND11_MODULE(path_planning_lib, m) {
                     const int t) {
                 self.setMaxCompTime(t);
             }, "Set the max computation time", py::arg("t"));
+
+    py::class_<PIBT>(m, "PIBTSolver")
+            .def(py::init<MAPF_Persistent *>(), "Constructor for PIBT class", py::arg("problem"));
 
 
 //            .def("findPath", [](// lambda function for converting to numpy

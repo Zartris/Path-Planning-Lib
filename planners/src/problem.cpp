@@ -157,8 +157,7 @@ MAPF_Instance::MAPF_Instance(const std::string &_instance)
 }
 
 MAPF_Instance::MAPF_Instance(const std::string &_instance_name, const int _seed,
-                             const int _max_comp_time, const int _max_timestep,
-                             const int _num_agents, const bool _grid_with_speed,
+                             const int _max_comp_time, const int _max_timestep, const int _num_agents,
                              const std::vector<std::vector<int>> &grid_map,
                              const std::vector<std::vector<int>> &edge_cost_moving_up,
                              const std::vector<std::vector<int>> &edge_cost_moving_down,

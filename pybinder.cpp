@@ -16,9 +16,7 @@ PYBIND11_MODULE(path_planning_lib, m) {
 // ============= MAPF_Instance =================
     py::class_<MAPF_Instance>(m, "MAPFProblemDefinition")
             .def(py::init<const std::string &,
-                         int,
-                         int, int,
-                         int, bool,
+                         int, int, int, int,
                          const std::vector<std::vector<int>> &,
                          const std::vector<std::vector<int>> &,
                          const std::vector<std::vector<int>> &,
@@ -29,7 +27,6 @@ PYBIND11_MODULE(path_planning_lib, m) {
                  py::arg("_max_comp_time"),
                  py::arg("_max_timestep"),
                  py::arg("_num_agents"),
-                 py::arg("_grid_with_speed"),
                  py::arg("grid_map"),
                  py::arg("edge_cost_moving_up"),
                  py::arg("edge_cost_moving_down"),

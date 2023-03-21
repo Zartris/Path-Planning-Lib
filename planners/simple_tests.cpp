@@ -33,11 +33,10 @@ int main() {
     int max_comp_time = 100;
     int max_timestep = 100;
     int num_agents = 4;
-    bool grid_with_speed = true;
 
     std::cout << "Creating problem instance" << std::endl;
 
-    MAPF_Instance problem(instance_name, seed, max_comp_time, max_timestep, num_agents, grid_with_speed,
+    MAPF_Instance problem(instance_name, seed, max_comp_time, max_timestep, num_agents,
                           grid_map,
                           edge_cost, edge_cost, edge_cost, edge_cost);
 

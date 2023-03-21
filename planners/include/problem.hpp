@@ -93,8 +93,7 @@ public:
     MAPF_Instance(const std::string &_instance);
 
     MAPF_Instance(const std::string &_instance_name, int _seed,
-                  int _max_comp_time, int _max_timestep,
-                  int _num_agents, bool _grid_with_speed,
+                  int _max_comp_time, int _max_timestep, int _num_agents,
                   const std::vector<std::vector<int>> &grid_map,
                   const std::vector<std::vector<int>> &edge_cost_moving_up,
                   const std::vector<std::vector<int>> &edge_cost_moving_down,

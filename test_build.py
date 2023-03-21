@@ -1,3 +1,6 @@
+# go to build folder and run this script:
+# make && cp ../test_build.py . && python test_build.py
+
 import numpy as np
 from path_planning_lib import MAPFProblemDefinition as MPD
 from path_planning_lib import PIBTSolver, Plan
@@ -58,4 +61,3 @@ print("Test solver.getPath\n", sol.getPath(0), "\n Done")
 print("Test solver.getPathXY\n", sol.getPathXY(0), "\n Done")
 print("Test getAllPaths\n", sol.getAllPaths(), "\n Done")
 print("Test getAllPathsXY\n", sol.getAllPathsXY(), "\n Done")
-

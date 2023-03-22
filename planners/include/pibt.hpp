@@ -45,7 +45,6 @@ private:
     void run();
 
     void reset() override {
-        std::cout << "reset" << std::endl;
         MAPF_Solver::reset();
         occupied_now.clear();
         occupied_next.clear();

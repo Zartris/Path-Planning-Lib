@@ -122,6 +122,7 @@ protected:
 
     virtual void reset() {
         solution.clear();
+
         solved = false;
         comp_time = 0;
     };
@@ -154,6 +155,8 @@ protected:
 
     void reset() override {
         MinimumSolver::reset();
+        solution.setConfigGoal(P->getConfigGoal());
+
         preprocessing_comp_time = 0;
         distance_table = DistanceTable(P->getNum(),
                                        std::vector<int>(G->getNodesSize(), max_timestep));

@@ -123,7 +123,7 @@ bool PushAndSwap::swap(Plan &plan, const int r, Nodes &U,
                   });
     }
 
-    Plan tmp_plan;
+    Plan tmp_plan(P->getConfigGoal());
     while (!swap_verticies.empty() && !succcess) {
         Node *v = swap_verticies[0];
         swap_verticies.erase(swap_verticies.begin());
@@ -145,7 +145,7 @@ bool PushAndSwap::swap(Plan &plan, const int r, Nodes &U,
     for (int i = 0; i < P->getNum(); ++i) occupied_now[plan.last(i)->id] = i;
 
     executeSwap(plan, r, s, occupied_now);
-    Plan reversed_tmp_plan;
+    Plan reversed_tmp_plan(P->getConfigGoal());
     {
         const int makespan = tmp_plan.getMakespan();
         for (int t = makespan; t >= 0; --t) {
@@ -496,7 +496,7 @@ Plan PushAndSwap::compress(const Plan &plan) {
                 temp_orders[v->id].push(i);
         }
     }
-    Plan new_plan;
+    Plan new_plan(P->getConfigGoal());
     new_plan.add(plan.get(0));
     std::vector<int> internal_clocks(P->getNum(), 0);
 

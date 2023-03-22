@@ -1,4 +1,9 @@
+#include <utility>
+
 #include "../include/plan.hpp"
+
+
+Plan::Plan(Config config_g) : config_g(std::move(config_g)) {}
 
 Config Plan::get(const int t) const {
     const int configs_size = configs.size();
@@ -17,6 +22,18 @@ Path Plan::getPath(const int i) const {
     Path path;
     int makespan = getMakespan();
     for (int t = 0; t <= makespan; ++t) path.push_back(get(t, i));
+    return path;
+}
+
+Path Plan::getPathToGoal(const int i) const {
+    if (config_g.empty()) return getPath(i);
+    Path path;
+    int makespan = getMakespan();
+    Node *goal = config_g[i];
+    for (int t = 0; t <= makespan; ++t) {
+        path.push_back(get(t, i));
+        if (get(t, i) == goal) break;
+    }
     return path;
 }
 
@@ -48,11 +65,15 @@ int Plan::getMakespan() const { return size() - 1; }
 
 int Plan::getPathCost(const int i) const {
     const int makespan = getMakespan();
-    const Node *g = get(makespan, i);
+    Node *g = get(makespan, i);
+    if (!config_g.empty()) {
+        g = config_g[i];
+    }
     int c = makespan;
     while (c > 0 && get(c - 1, i) == g) --c;
     return c;
 }
+
 
 int Plan::getSOC() const {
     int makespan = getMakespan();
@@ -74,7 +95,7 @@ Plan Plan::operator+(const Plan &other) const {
         if (c1[i] != c2[i]) halt("invalid operation. (Plan Plan::operator+ second)");
     }
     // merge
-    Plan new_plan;
+    Plan new_plan(config_g);
     new_plan.configs = configs;
     for (int t = 1; t < other.size(); ++t) new_plan.add(other.get(t));
     return new_plan;
@@ -194,4 +215,8 @@ void Plan::halt(const std::string &msg) const {
 
 void Plan::warn(const std::string &msg) const {
     std::cout << "warn@Plan: " << msg << std::endl;
+}
+
+void Plan::setConfigGoal(const Config &_config_g) {
+    config_g = _config_g;
 }

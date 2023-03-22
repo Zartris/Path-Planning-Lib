@@ -13,6 +13,7 @@ MinimumSolver::MinimumSolver(Problem *_P)
           comp_time(0),
           verbose(false),
           log_short(false) {
+
 }
 
 void MinimumSolver::solve() {

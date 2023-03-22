@@ -9,8 +9,13 @@
 struct Plan {
 private:
     Configs configs;  // main
+    Config config_g;  // goal
 
 public:
+    Plan() = default;
+
+    Plan(Config config_g);
+
     ~Plan() {}
 
     // timestep -> configuration
@@ -21,6 +26,8 @@ public:
 
     // path
     Path getPath(const int i) const;
+
+    Path getPathToGoal(const int i) const;
 
     // path cost
     int getPathCost(const int i) const;
@@ -73,6 +80,8 @@ public:
     int getMaxConstraintTime(const int id, Node *s, Node *g, Graph *G) const;
 
     int getMaxConstraintTime(const int id, MAPF_Instance *P) const;
+
+    void setConfigGoal(const Config &config_g);
 
     // error
     void halt(const std::string &msg) const;

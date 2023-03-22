@@ -123,7 +123,25 @@ PYBIND11_MODULE(path_planning_lib, m) {
                 }
                 py::array out = py::cast(path_xy);
                 return out;
-            }, "Get the path for agent i", py::arg("agent_index"))
+            }, "Get the list of X,Y coord for agent i", py::arg("agent_index"))
+            .def("getPathToGoal", [](// lambda function for converting to numpy
+                    Plan &self, // reference to the class we are using
+                    int agent_index) {
+                auto path = self.getPathToGoal(agent_index);
+                py::array out = py::cast(path);
+                return out;
+            }, "Get the path for agent i, removing all the padding", py::arg("agent_index"))
+            .def("getPathToGoalXY", [](// lambda function for converting to numpy
+                    Plan &self, // reference to the class we are using
+                    int agent_index) {
+                auto path = self.getPathToGoal(agent_index);
+                std::vector<std::pair<int, int>> path_xy;
+                for (auto &p: path) {
+                    path_xy.emplace_back(p->getX(), p->getY());
+                }
+                py::array out = py::cast(path_xy);
+                return out;
+            }, "Get the list of X,Y coord for agent i, removing all the padding", py::arg("agent_index"))
             .def("getAllPaths", [](// lambda function for converting to numpy
                     Plan &self) {
                 auto num_agents = self.getNumAgents();

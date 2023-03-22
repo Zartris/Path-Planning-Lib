@@ -118,6 +118,7 @@ bool Plan::validate(MAPD_Instance *P) const {
 
 bool Plan::validate(const Config &starts, const Config &goals) const {
     // check goal
+
     if (!sameConfig(last(), goals)) {
         warn("validation, invalid goals");
         return false;

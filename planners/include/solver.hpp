@@ -58,6 +58,7 @@ protected:
 public:
     virtual void setParams(int argc, char *argv[]) {};
 
+
     void setVerbose(bool _verbose) { verbose = _verbose; }
 
     void setLogShort(bool _log_short) { log_short = _log_short; }
@@ -119,6 +120,12 @@ protected:
 
     virtual void exec() {};  // main
 
+    virtual void reset() {
+        solution.clear();
+        solved = false;
+        comp_time = 0;
+    };
+
 public:
     MinimumSolver(Problem *_P);
 
@@ -145,6 +152,16 @@ class MAPF_Solver : public MinimumSolver {
 protected:
     MAPF_Instance *const P;  // problem instance
 
+    void reset() override {
+        MinimumSolver::reset();
+        preprocessing_comp_time = 0;
+        distance_table = DistanceTable(P->getNum(),
+                                       std::vector<int>(G->getNodesSize(), max_timestep));
+        distance_table_p = nullptr;
+        LB_soc = 0;
+        LB_makespan = 0;
+    }
+
 private:
     // useful info
     int LB_soc;       // lower bound of soc
@@ -160,7 +177,7 @@ protected:
     // -------------------------------
     // main
 private:
-    void exec();
+    void exec();;
 
 protected:
     virtual void run() {}  // main
@@ -170,6 +187,11 @@ protected:
 public:
     int getLowerBoundSOC();       // get trivial lower bound of sum-of-costs
     int getLowerBoundMakespan();  // get trivial lower bound of makespan
+
+    void setConfig(const std::vector<std::pair<int, int>> &start_pos,
+                   const std::vector<std::pair<int, int>> &goal_pos,
+                   const std::vector<int> &priority);
+
 private:
     void computeLowerBounds();  // compute lb_soc and lb_makespan
 

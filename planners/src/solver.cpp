@@ -16,6 +16,7 @@ MinimumSolver::MinimumSolver(Problem *_P)
 }
 
 void MinimumSolver::solve() {
+    reset();
     start();
     exec();
     end();
@@ -24,6 +25,7 @@ void MinimumSolver::solve() {
 void MinimumSolver::start() { t_start = Time::now(); }
 
 void MinimumSolver::end() { comp_time = getSolverElapsedTime(); }
+
 
 // -------------------------------
 // utilities for time
@@ -110,6 +112,13 @@ int MAPF_Solver::getLowerBoundSOC() {
 int MAPF_Solver::getLowerBoundMakespan() {
     if (LB_makespan == 0) computeLowerBounds();
     return LB_makespan;
+}
+
+
+void MAPF_Solver::setConfig(const std::vector<std::pair<int, int>> &start_pos,
+                            const std::vector<std::pair<int, int>> &goal_pos,
+                            const std::vector<int> &priority) {
+    P->setConfig(start_pos, goal_pos, priority);
 }
 
 // -------------------------------

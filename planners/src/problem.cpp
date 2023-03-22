@@ -221,10 +221,13 @@ void MAPF_Instance::setConfig(const std::vector<std::pair<int, int>> &start_pos,
     config_p.clear();
 
     for (int i = 0; i < num_agents; ++i) {
+
         int x_s = start_pos[i].first;
         int y_s = start_pos[i].second;
         int x_g = goal_pos[i].first;
         int y_g = goal_pos[i].second;
+        std::cout << "x_s: " << x_s << ", y_s: " << y_s << ", x_g: " << x_g << ", y_g: " << y_g << std::endl;
+
         if (!G->existNode(x_s, y_s)) {
             halt("start node (" + std::to_string(x_s) + ", " + std::to_string(y_s) +
                  ") does not exist, invalid scenario");

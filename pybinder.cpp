@@ -34,6 +34,21 @@ PYBIND11_MODULE(path_planning_lib, m) {
                  py::arg("edge_cost_moving_right"))
             .def("setConfig", &MAPF_Instance::setConfig, "Set the configuration of the problem", py::arg("start_pos"),
                  py::arg("goal_pos"), py::arg("priority"))
+            .def("getConfigs", [](MAPF_Instance &self) {
+                std::vector<std::pair<int, int>> start_pos;
+                std::vector<std::pair<int, int>> goal_pos;
+                std::vector<int> priority;
+                for (Node *n: self.getConfigStart()) {
+                    start_pos.emplace_back(n->getX(), n->getY());
+                }
+                for (Node *n: self.getConfigGoal()) {
+                    goal_pos.emplace_back(n->getX(), n->getY());
+                }
+                for (int p: self.getConfigPriority()) {
+                    priority.push_back(p);
+                }
+                return std::make_tuple(start_pos, goal_pos, priority);
+            }, "Get the configuration of the problem")
             .def("setWellFormedInstance", &MAPF_Instance::setWellFormedInstance,
                  "Set the configuration of the problem")
             .def("setRandomStartsGoals", &MAPF_Instance::setRandomStartsGoals,
@@ -102,8 +117,9 @@ PYBIND11_MODULE(path_planning_lib, m) {
                     Plan &self, // reference to the class we are using
                     int agent_index) {
                 auto path = self.getPath(agent_index);
-                std::vector<std::pair<int, int>> path_xy;
+                std::vector<std::pair<int, int>> path_xy(path.size());
                 for (auto &p: path) {
+                    std::cout << "p: " << p->getX() << ", " << p->getY() << std::endl;
                     path_xy.emplace_back(p->getX(), p->getY());
                 }
                 py::array out = py::cast(path_xy);
@@ -148,7 +164,25 @@ PYBIND11_MODULE(path_planning_lib, m) {
             .def("solve", &PIBT::solve, "Solve the problem")
             .def("succeed", &PIBT::succeed, "Check if the problem was solved")
             .def("getSolution", &PIBT::getSolution, "Get the solution")
-            .def("printResult", [](PIBT &self) { self.printResult(); }, "Print the results");
+            .def("printResult", [](PIBT &self) { self.printResult(); }, "Print the results")
+            .def("getCompTime", &PIBT::getCompTime, "Get the computation time")
+            .def("setConfig", &PIBT::setConfig, "Set the configuration of the problem", py::arg("start_pos"),
+                 py::arg("goal_pos"), py::arg("priority"))
+            .def("getConfigs", [](PIBT &self) {
+                std::vector<std::pair<int, int>> start_pos;
+                std::vector<std::pair<int, int>> goal_pos;
+                std::vector<int> priority;
+                for (Node *n: self.getP()->getConfigStart()) {
+                    start_pos.emplace_back(n->getX(), n->getY());
+                }
+                for (Node *n: self.getP()->getConfigGoal()) {
+                    goal_pos.emplace_back(n->getX(), n->getY());
+                }
+                for (int p: self.getP()->getConfigPriority()) {
+                    priority.push_back(p);
+                }
+                return std::make_tuple(start_pos, goal_pos, priority);
+            }, "Get the configurations of the problem");
 
 
 

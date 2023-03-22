@@ -18,7 +18,6 @@ def make_test_problem():
         _max_comp_time=100,
         _max_timestep=100,
         _num_agents=4,
-        _grid_with_speed=True,
         grid_map=grid_map.tolist(),
         edge_cost_moving_up=edge_cost,
         edge_cost_moving_down=edge_cost,
@@ -59,5 +58,20 @@ solver.printResult()
 sol: Plan = solver.getSolution()
 print("Test solver.getPath\n", sol.getPath(0), "\n Done")
 print("Test solver.getPathXY\n", sol.getPathXY(0), "\n Done")
+print("Test getAllPaths\n", sol.getAllPaths(), "\n Done")
+print("Test getAllPathsXY\n", sol.getAllPathsXY(), "\n Done")
+
+print("==============================================")
+print("===============RECONFIG=====================")
+print("==============================================")
+solver.setConfig(
+    start_pos=np.array([[0, 0], [0, 1], [0, 2], [0, 3]], dtype=int).tolist(),
+    goal_pos=np.array([[22, 22], [23, 22], [24, 22], [25, 22]], dtype=int).tolist(),
+    priority=np.array([0, 1, 2, 3], dtype=int).tolist()
+)
+solver.solve()
+sol: Plan = solver.getSolution()
+print("Test solver.getPath\n", sol.getPath(1), "\n Done")
+print("Test solver.getPathXY\n", sol.getPathXY(1), "\n Done")
 print("Test getAllPaths\n", sol.getAllPaths(), "\n Done")
 print("Test getAllPathsXY\n", sol.getAllPathsXY(), "\n Done")

@@ -26,6 +26,7 @@ private:
         int elapsed;        // eta
         int init_d;         // initial distance
         float tie_breaker;  // epsilon, tie-breaker
+        bool touched_goal; // whether the agent has touched the goal or not
     };
     using Agents = std::vector<Agent *>;
 

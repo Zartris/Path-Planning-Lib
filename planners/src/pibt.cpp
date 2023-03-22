@@ -30,7 +30,8 @@ void PIBT::run() {
                              g,                          // goal
                              P->getConfigPriority()[i],                          // elapsed
                              d,                          // dist from s -> g
-                             getRandomFloat(0, 1, MT)};  // tie-breaker
+                             getRandomFloat(0, 1, MT),
+                             false};  // tie-breaker
         A.push_back(a);
         occupied_now[s->id] = a;
     }
@@ -62,7 +63,10 @@ void PIBT::run() {
             config[a->id] = a->v_next;
             occupied_now[a->v_next->id] = a;
             // check goal condition
-            check_goal_cond &= (a->v_next == a->g);
+//            check_goal_cond &= (a->v_next == a->g); // all agents reach their goal
+
+            a->touched_goal /= (a->v_next == a->g);
+            check_goal_cond &= a->touched_goal; // all agents have touch their goal
             // update priority
             a->elapsed = (a->v_next == a->g) ? 0 : a->elapsed + 1;
             // reset params

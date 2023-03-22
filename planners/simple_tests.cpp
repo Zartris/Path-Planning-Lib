@@ -62,8 +62,8 @@ int main() {
                                                {0, 1},
                                                {0, 2},
                                                {0, 3}};
-    std::vector<std::pair<int, int>> goal_pos{{39, 39},
-                                              {39, 38},
+    std::vector<std::pair<int, int>> goal_pos{{11, 11},
+                                              {11, 11},
                                               {39, 37},
                                               {39, 36}};
     std::vector<int> priority{0, 1, 2, 3};

@@ -65,7 +65,7 @@ void PIBT::run() {
             // check goal condition
 //            check_goal_cond &= (a->v_next == a->g); // all agents reach their goal
 
-            a->touched_goal /= (a->v_next == a->g);
+            a->touched_goal |= (a->v_next == a->g);
             check_goal_cond &= a->touched_goal; // all agents have touch their goal
             // update priority
             a->elapsed = (a->v_next == a->g) ? 0 : a->elapsed + 1;

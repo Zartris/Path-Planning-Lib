@@ -117,7 +117,7 @@ PYBIND11_MODULE(path_planning_lib, m) {
                     Plan &self, // reference to the class we are using
                     int agent_index) {
                 auto path = self.getPath(agent_index);
-                std::vector<std::pair<int, int>> path_xy(path.size());
+                std::vector<std::pair<int, int>> path_xy;
                 for (auto &p: path) {
                     std::cout << "p: " << p->getX() << ", " << p->getY() << std::endl;
                     path_xy.emplace_back(p->getX(), p->getY());

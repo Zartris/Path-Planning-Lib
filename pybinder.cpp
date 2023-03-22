@@ -119,7 +119,6 @@ PYBIND11_MODULE(path_planning_lib, m) {
                 auto path = self.getPath(agent_index);
                 std::vector<std::pair<int, int>> path_xy;
                 for (auto &p: path) {
-                    std::cout << "p: " << p->getX() << ", " << p->getY() << std::endl;
                     path_xy.emplace_back(p->getX(), p->getY());
                 }
                 py::array out = py::cast(path_xy);
@@ -128,10 +127,8 @@ PYBIND11_MODULE(path_planning_lib, m) {
             .def("getAllPaths", [](// lambda function for converting to numpy
                     Plan &self) {
                 auto num_agents = self.getNumAgents();
-                std::cout << "num_agents: " << num_agents << std::endl;
                 std::vector<std::vector<Node *>> paths;
                 for (int i = 0; i < num_agents; i++) {
-                    std::cout << "i: " << i << std::endl;
                     paths.push_back(self.getPath(i));
                 }
                 py::array out = py::cast(paths);

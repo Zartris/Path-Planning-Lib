@@ -28,7 +28,7 @@ void PIBT::run() {
                              s,                          // current location
                              nullptr,                    // next location
                              g,                          // goal
-                             0,                          // elapsed
+                             P->getConfigPriority()[i],                          // elapsed
                              d,                          // dist from s -> g
                              getRandomFloat(0, 1, MT)};  // tie-breaker
         A.push_back(a);
